@@ -10,8 +10,8 @@ function parseArguments(args) {
 
   const programOpts = program.parse(args).opts();
 
-  if (programOpts.shift < 0 || isNaN(programOpts.shift)) {
-    process.stderr.write('Error: Shift should be a positive number');
+  if (isNaN(programOpts.shift)) {
+    process.stderr.write('Error: Shift should be a number');
     process.exit(1);
   }
 

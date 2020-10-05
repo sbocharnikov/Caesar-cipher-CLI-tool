@@ -1,5 +1,6 @@
 function cipher(chunk, shift, action) {
-  const transform = action === 'decode' ? decode : encode;
+  const transform = getCipherFunction(shift, action);
+  shift = Math.abs(shift);
   for (let i = 0; i < chunk.length; i++) {
     if (isLowercaseLetter(chunk[i])) {
       chunk[i] = transform(chunk[i], shift, true);
@@ -7,6 +8,20 @@ function cipher(chunk, shift, action) {
       chunk[i] = transform(chunk[i], shift, false);
     }
   }
+}
+
+function getCipherFunction(shift, action) {
+  let transform = encode;
+  if (action === 'encode' && shift >= 0) {
+    transform = encode;
+  } else if (action === 'encode' && shift < 0) {
+    transform = decode;
+  } else if (action === 'decode' && shift >= 0) {
+    transform = decode;
+  } else if (action === 'decode' && shift < 0) {
+    transform = encode;
+  }
+  return transform;
 }
 
 function isUppercaseLetter(char) {
