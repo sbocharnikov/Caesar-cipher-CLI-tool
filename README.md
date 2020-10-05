@@ -14,7 +14,19 @@ If input argument is not provided then stdin will be used as input source.
 If input argument is provided but file isn't accessible then error will be shown.
 The same is for writing.
 
-To start CLI tool go to `app` folder and run  
-`node app -s 1 -a encode`  
-`node app -s 1 -a encode -i input.txt -o output.txt`
-    
+#### Downloading and running application
+
+```
+git clone https://github.com/sbocharnikov/Caesar-cipher-CLI-tool.git
+```
+Then go to folder `Caesar-cipher-CLI-tool` and install NPM modules
+```
+npm install
+```
+Then go to folder `app` and start application
+```
+node app -s 1 -a encode
+```
+```
+node app -s 1 -a encode -i input.txt -o output.txt
+```
