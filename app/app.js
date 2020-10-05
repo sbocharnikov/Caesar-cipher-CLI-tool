@@ -1,28 +1,11 @@
-const { program } = require('commander');
+const { parseArguments } = require('./parse-args');
 const { pipeline } = require('stream');
 const { CaesarTransform } = require('./caesar-transform');
 const { createReadStream, createWriteStream } = require('./create-stream');
 let input;
 let output;
 
-program
-  .storeOptionsAsProperties(false)
-  .requiredOption('-a, --action <type>', 'action: encode or decode')
-  .requiredOption('-s, --shift <number>', 'shift')
-  .option('-i, --input <path>', 'input file')
-  .option('-o, --output <path>', 'output file');
-
-const programOpts = program.parse(process.argv).opts();
-
-if (programOpts.shift < 0 || isNaN(programOpts.shift)) {
-  process.stderr.write('Error: Shift should be a positive number');
-  process.exit(1);
-}
-
-if (programOpts.action !== 'encode' && programOpts.action !== 'decode') {
-  process.stderr.write('Error: Action should be encode or decode');
-  process.exit(1);
-}
+const programOpts = parseArguments(process.argv);
 
 const caesarTransform = new CaesarTransform(
   programOpts.shift,
@@ -45,7 +28,7 @@ createReadStream(programOpts.input)
 
 function createPipeline() {
   pipeline(input, caesarTransform, output, (error) => {
-    if (error) console.log('Error: ', error);
-    console.log('Finished successfully');
+    if (error) process.stderr.write(`Error: ${error}`);
+    process.stdout.write('Finished successfully');
   });
 }
